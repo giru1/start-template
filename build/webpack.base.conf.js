@@ -3,6 +3,7 @@ const fs = require('fs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader');
 const webpack = require('webpack');
 
@@ -121,11 +122,24 @@ module.exports = {
       { from: `${PATHS.src}/${PATHS.assets}fonts`, to: `${PATHS.assets}fonts` },
       { from: `${PATHS.src}/static`, to: '' },
     ]),
-    new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery',
-    }),
+    new SVGSpritemapPlugin({
+    // input: {
+    //     options: {
+    //         src: 'src/assets/img/sprite/**/*.svg'
+    //     }
+    // },
+    output: {
+        filename: 'spritemap.svg',
+        svg4everybody: true,
+        svgo: true
+    },
+    sprite: {
+        prefix: 'i-',
+        generate: {
+          use: true
+        }
+    }
+  }),
 
     // Automatic creation any html pages (Don't forget to RERUN dev server)
     // see more: https://github.com/vedees/webpack-template/blob/master/README.md#create-another-html-files
